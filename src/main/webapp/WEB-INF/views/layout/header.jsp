@@ -12,7 +12,7 @@
 </head>
 <body>
     <header>
-        <a href="/"></a> &nbsp;
+        <a href="/">Home</a> &nbsp;
         <a href="/board/save">글쓰기</a> &nbsp;
         <a href="/board/findAll">글목록</a> &nbsp;
     </header>

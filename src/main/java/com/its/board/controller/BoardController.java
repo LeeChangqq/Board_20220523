@@ -1,7 +1,10 @@
 package com.its.board.controller;
 
 import com.its.board.dto.BoardDTO;
+import com.its.board.dto.CommentDTO;
+import com.its.board.dto.PageDTO;
 import com.its.board.service.BoardService;
+import com.its.board.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +18,8 @@ import java.util.List;
 public class BoardController {
     @Autowired
     BoardService boardService;
+    @Autowired
+    CommentService commentService;
 
     //  회원가입 : /member-save => /member/save
     //  글쓰기 : /board-save => /board/save
@@ -43,9 +48,13 @@ public class BoardController {
     }
 
     @GetMapping("/detail")
-    public String findById(@RequestParam("id") Long id, Model model) {
+    public String findById(@RequestParam("id") Long id, Model model,@RequestParam(value = "page", required = false, defaultValue = "1") int page) {
         BoardDTO boardDTO = boardService.findById(id);
         model.addAttribute("boardDTO", boardDTO);
+        model.addAttribute("page", page);
+        // 댓글 목록도 가져가야 함.
+        List<CommentDTO> commentDTOList = commentService.findAll(id);
+        model.addAttribute("commentList", commentDTOList);
         return "board/detail";
     }
 
@@ -90,6 +99,25 @@ public class BoardController {
     public String saveFile(@ModelAttribute BoardDTO boardDTO) throws IOException {
         boardService.saveFile(boardDTO);
         return "redirect:/board/findAll";
+    }
+    @GetMapping("/paging")
+    // /board/paging>page=1
+    // required=false로 하면 /board/paging 요청도 가능
+    // 별도의 페이지 값을 요청하지 않으면 첫페이지(page=1)을 보요주자.
+    public String paging(@RequestParam(value="page", required=false, defaultValue="1") int page, Model model) {
+        List<BoardDTO> boardList = boardService.pagingList(page);
+        PageDTO paging = boardService.paging(page);
+        model.addAttribute("boardList", boardList);
+        model.addAttribute("paging", paging);
+        return "board/pagingList";
+    }
+
+    // 검색처리
+    @GetMapping("/search")
+    public String search(@RequestParam("searchType") String searchType, @RequestParam("q") String q, Model model){
+        List<BoardDTO> searchList = boardService.search(searchType, q);
+        model.addAttribute("boardList", searchList);
+        return "board/list";
     }
 
 }

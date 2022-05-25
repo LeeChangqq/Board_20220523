@@ -36,7 +36,7 @@
                 <td>${board.boardContents}</td>
                 <td>${board.boardHits}</td>
                 <!--<td>$ {board.boardCreatedDate}</td>-->
-                <td><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${board.boardCreatedDate}"></fmt:formatDate></td>
+                <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${board.boardCreatedDate}"></fmt:formatDate></td>
             </tr>
         </c:forEach>
     </table>

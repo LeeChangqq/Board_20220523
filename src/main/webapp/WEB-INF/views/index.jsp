@@ -19,5 +19,6 @@
     <a href="/board/save">글 작성</a> <br>
     <button onclick="saveFileForm()">글 작성(파일)</button>
     <a href="/board/findAll">리스트</a>
+    <a href="/board/paging">페이징</a>
 </body>
 </html>

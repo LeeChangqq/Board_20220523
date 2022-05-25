@@ -5,7 +5,7 @@
 
 <mapper namespace="Board">
     <insert id="save" parameterType="board">
-        insert into board_table(id, boardTitle, boardWriter, boardPassword, boardContents, boardCreatedDate) values (#{id},#{boardTitle},#{boardWriter},#{boardPassword},#{boardContents}, now())
+        insert into board_table(id, boardTitle, boardWriter, boardPassword, boardCreatedDate, boardContents) values (#{id},#{boardTitle},#{boardWriter},#{boardPassword},now(), #{boardContents})
     </insert>
     <insert id="saveFile" parameterType="board">
         insert into board_table(id, boardTitle, boardWriter, boardPassword, boardContents, boardCreatedDate, boardFileName) values (#{id},#{boardTitle},#{boardWriter},#{boardPassword},#{boardContents}, now(), #{boardFileName})
@@ -25,6 +25,18 @@
     <update id="update" parameterType="board">
         update board_table set boardTitle=#{boardTitle}, boardWriter=#{boardWriter}, boardPassword=#{boardPassword}, boardContents=#{boardContents} where id=#{id}
     </update>
+    <select id="pagingList" parameterType="java.util.HashMap" resultType="board">
+        select * from board_table order by id desc limit #{start}, #{limit}
+        -- HashMap = 여기서 parameterType을 java.util.HashMap으로 준다
+    </select>
+
+    <select id="count" resultType="int">
+        select count(id) from board_table
+    </select>
+    <select id="search" parameterType="java.util.HashMap" resultType="board">
+        select * from board_table where ${type} like concat('%', #{q}, '%') order by  id desc
+        -- 컬럼은 = $ 해야함
+    </select>
 </mapper>
 
 
